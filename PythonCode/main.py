@@ -1,16 +1,19 @@
-# This is a sample Python script.
+import praw
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+reddit = praw.Reddit(client_id = 'aFAU9vtHS4EJNQ',
+                     client_secret = 'Dr2UM_C-F8YBR-b3IwuiklJEpVY',
+                     username = 'Coletana',
+                     password = 'Tetradigm1!',
+                     user_agent = 'chatbot by cole'
+                     )
 
+subreddit = reddit.subreddit('words')
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+keyphrase = '!Coletana'
 
+for comment in subreddit.stream.comments():
+    if keyphrase in comment.body:
+        comment.reply("Summoned")
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
