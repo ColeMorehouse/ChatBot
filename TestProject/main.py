@@ -14,6 +14,11 @@ who = nlp("who")
 why = nlp("why")
 how = nlp("how")
 
+intent = {
+    "greeting": False,
+    "question": False,
+    "statement": False
+}
 
 print(where.similarity(who))
 
