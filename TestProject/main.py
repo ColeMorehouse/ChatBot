@@ -2,17 +2,26 @@ import praw
 
 import spacy
 
-#kin = input("Enter something")
+
 
 
 
 nlp = spacy.load("en_core_web_md")  # make sure to use larger model!
+kin = nlp(input("Enter something"))
+
 tokens = nlp("Hi my name is Cole. Who are you?")
 hello = nlp("hello")
 where = nlp("where")
 who = nlp("who")
 why = nlp("why")
 how = nlp("how")
+bye = nlp("bye")
+
+
+print(kin.similarity(hello))
+print(kin.similarity(bye))
+
+
 
 intent = {
     "greeting": False,
@@ -20,7 +29,6 @@ intent = {
     "statement": False
 }
 
-print(where.similarity(who))
 
 for word in tokens:
     if word.similarity(hello) > 0.7:

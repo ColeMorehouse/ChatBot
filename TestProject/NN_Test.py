@@ -1,6 +1,24 @@
 
 import numpy as np
 import statistics
+import spacy
+
+
+
+
+
+nlp = spacy.load("en_core_web_md")  # make sure to use larger model!
+kin = nlp(input("Enter something"))
+
+tokens = nlp("Hi my name is Cole. Who are you?")
+hello = nlp("hello")
+where = nlp("where")
+who = nlp("who")
+why = nlp("why")
+how = nlp("how")
+bye = nlp("bye")
+
+
 
 def sigmoid(x):
   # Sigmoid activation function: f(x) = 1 / (1 + e^(-x))
@@ -116,40 +134,27 @@ class OurNeuralNetwork:
         loss = mse_loss(all_y_trues, y_preds)
         print("Epoch %d loss: %.3f" % (epoch, loss))
 
-trainWeights = []
-trainHeights = []
+
+positive = kin.similarity(hello) - kin.similarity(bye)
+negative = kin.similarity(bye) - kin.similarity(hello)
 
 
 
 # Define dataset
 data = np.array([
-  [133, 65],  # Alice
-  [160, 72],   # Bob
-  [152, 70],   # Charlie
-  [120, 60], # Diana
+  [positive*100, positive*100],  # Alice
+  [negative*100, negative*100],   # Bob
+  [negative*100, negative*100],   # Charlie
+  [positive*100, positive*100] # Diana
 ])
+print("data", data)
 all_y_trues = np.array([
-  1, # Alice
-  0, # Bob
-  0, # Charlie
-  1, # Diana
+  1, # greeting
+  0, # bye
+  0, # bye
+  1, # greeting
 ])
 
-
-for x in data:
-  trainWeights.append(x[0])
-  trainHeights.append(x[1])
-
-print(trainWeights)
-print(trainHeights)
-
-weightAvg = statistics.mean(trainWeights)
-heightAvg = statistics.mean(trainHeights)
-
-
-for x in data:
-  x[0]-=weightAvg
-  x[1]-=heightAvg
 
 
 print(data)
@@ -159,8 +164,9 @@ network = OurNeuralNetwork()
 network.train(data, all_y_trues)
 
 # Make some predictions
-emily = np.array([128, 63]) # 128 pounds, 63 inches
+emily = np.array([100*(kin.similarity(hello) - kin.similarity(bye)), 100*(kin.similarity(hello) - kin.similarity(bye))]) # 128 pounds, 63 inches
 frank = np.array([155, 68])  # 155 pounds, 68 inches
+
 averageOne = (emily[0]+frank[0])/2
 averageTwo = (emily[1]+frank[1])/2
 emily[0]-=averageOne
@@ -169,7 +175,7 @@ emily[1]-=averageTwo
 frank[1]-=averageTwo
 
 print(emily)
-print(frank)
+#print(frank)
 
-print("Emily: %.3f" % network.feedforward(emily)) # 0.951 - F
-print("Frank: %.3f" % network.feedforward(frank)) # 0.039 - M
+print("emily: %.3f" % network.feedforward(emily)) # 0.951 - F
+#print("frank: %.3f" % network.feedforward(frank)) # 0.039 - M
